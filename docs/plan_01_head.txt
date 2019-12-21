@@ -6,7 +6,7 @@ possible outcomes for default behavior of head command are:
     (c) no file present
 2.head -n 5 a.txt
 3.head 
-4.head -n 5
+4.head -n 7
 5.head a.txt b.txt
 6.head -n 5 a.txt b.txt 
 
@@ -38,6 +38,14 @@ input --> node head.js a.txt
 1c.output --> [when the file(a.txt) is not existing] --> [error stream]
 head: a.txt: No such file or directory
 
+2.output --> 
+1
+2
+3
+4
+5
+6
+7
 
 ---------------------------- flow of working of head command --------------------------
 
