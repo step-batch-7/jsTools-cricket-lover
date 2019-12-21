@@ -1,0 +1,25 @@
+-----all versions of head flow------
+0.1.head a.txt
+    (a) has at least 10 lines
+    (b) has less than 10 lines
+    (c) no file present
+0.2.head 
+0.3.head -n 5 a.txt
+0.4.head -n 7
+0.5.head a.txt b.txt
+0.6.head -n 5 a.txt b.txt
+
+---------
+v0.1 
+create all the required files and directories
+    mkdir src test
+    touch head.js src/headLib.js test/testHeadLib.js
+initialize npm 
+install required modules (chai)
+check all the connections are good head.js-src/headLib.js 
+make sure mocha is working fine
+    tasks:
+    extractHeadLines
+    generateErrorMessage
+    loadContentsFromFile
+    readCommandLineArgs

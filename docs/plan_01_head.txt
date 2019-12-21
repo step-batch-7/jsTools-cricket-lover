@@ -4,8 +4,8 @@ possible outcomes for default behavior of head command are:
     (a) has at least 10 lines
     (b) has less than 10 lines
     (c) no file present
-2.head -n 5 a.txt
-3.head 
+2.head 
+3.head -n 5 a.txt
 4.head -n 7
 5.head a.txt b.txt
 6.head -n 5 a.txt b.txt 
@@ -38,7 +38,7 @@ input --> node head.js a.txt
 1c.output --> [when the file(a.txt) is not existing] --> [error stream]
 head: a.txt: No such file or directory
 
-2.output --> 
+2.output --> [when number of lines are requested]
 1
 2
 3
@@ -61,7 +61,7 @@ output: lines of text --> joined lines of text
     8
     9
     0
-input: array of strings --> listOfLines
+input: array of strings --> listOfLines, requested number of lines
     [1,2,3,....,15]
 function name --> joinLinesOfText
 
@@ -83,9 +83,10 @@ input:string --> filename
 function name --> loadContentsFromFile
 
 [3] 
-output:string --> filename to be read
-    "a.txt"               
+output:array of string --> filename to be read, requested number of lines
+    ["a.txt","-n","7"]               
 input:array of strings --> command line arguments
-    ["node", "head.js", "a.txt"]  
+    ["node", "head.js", "a.txt", "-n" "7"]  
 function name --> readCommandLineArgs
+
 
