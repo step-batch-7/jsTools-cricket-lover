@@ -1,0 +1,83 @@
+                                                  WORKING FLOW HEAD COMMAND
+possible outcomes for default behavior of head command are:
+1.head a.txt
+    (a) has at least 10 lines
+    (b) has less than 10 lines
+    (c) no file present
+2.head -n 5 a.txt
+3.head 
+4.head -n 5
+5.head a.txt b.txt
+6.head -n 5 a.txt b.txt 
+
+---head a.txt---
+
+input --> node head.js a.txt
+
+----------------------------------[black box]------------------------------
+
+1a.output --> [when number of lines are not requested]
+1
+2
+3
+4
+5
+6
+7
+8
+9
+0
+
+1b.output --> [when file(a.txt) has less than ten lines(5 lines)]
+1
+2
+3
+4
+5
+
+1c.output --> [when the file(a.txt) is not existing] --> [error stream]
+head: a.txt: No such file or directory
+
+
+---------------------------- flow of working of head command --------------------------
+
+[1a] 
+output: lines of text --> joined lines of text 
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    0
+input: array of strings --> listOfLines
+    [1,2,3,....,15]
+function name --> joinLinesOfText
+
+[Note:- gives 10 lines when file contains at least 10 lines,
+        gives all lines when file contains less than 10 lines]
+
+[1b]
+output:text --> errorText
+    head: a.txt: No such file or directory
+input:string --> filename
+    "a.txt"
+function name --> generateErrorMessage   
+
+[2]
+output: array of strings--> list of lines
+    [ 1,2,3,....,15]
+input:string --> filename
+    "a.txt"               
+function name --> loadContentsFromFile
+
+[3] 
+output:string --> filename to be read
+    "a.txt"               
+input:array of strings --> command line arguments
+    ["node", "head.js", "a.txt"]  
+function name --> readCommandLineArgs
+
