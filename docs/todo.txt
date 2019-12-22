@@ -12,7 +12,7 @@
 ---------
 v0.1 
 create all the required files and directories
-    mkdir src test
+    md src test
     touch head.js src/headLib.js test/testHeadLib.js
 initialize npm 
 install required modules (chai)
