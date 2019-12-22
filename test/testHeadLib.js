@@ -2,7 +2,8 @@ const assert = require("chai").assert;
 const {
   extractHeadLines,
   generateErrorMessage,
-  loadContentsFromFile
+  loadContentsFromFile,
+  readCommandLineArgs
 } = require("../src/headLib");
 
 describe("defaultFlow", function() {
@@ -50,6 +51,14 @@ describe("defaultFlow", function() {
         "15"
       ];
       const actual = loadContentsFromFile(filePath, fileReader);
+      assert.deepStrictEqual(actual, expected);
+    });
+  });
+  describe("readCommandLineArgs", function() {
+    it("should read the arguments from the given file", function() {
+      const commandLineArgs = ["node", "head.js", "a.txt"];
+      const expected = { filename: "a.txt" };
+      const actual = readCommandLineArgs(commandLineArgs);
       assert.deepStrictEqual(actual, expected);
     });
   });

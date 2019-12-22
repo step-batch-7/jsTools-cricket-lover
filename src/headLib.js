@@ -12,8 +12,15 @@ const loadContentsFromFile = function(filePath, fileReader) {
   return fileContents.split("\n");
 };
 
+const readCommandLineArgs = function(commandLineArgs) {
+  const filename = commandLineArgs[2];
+  const headOptions = { filename };
+  return headOptions;
+};
+
 module.exports = {
   extractHeadLines,
   generateErrorMessage,
-  loadContentsFromFile
+  loadContentsFromFile,
+  readCommandLineArgs
 };
