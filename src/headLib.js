@@ -7,7 +7,13 @@ const generateErrorMessage = function(filename) {
   return errorMessage;
 };
 
+const loadContentsFromFile = function(filePath, fileReader) {
+  const fileContents = fileReader("utf8", filePath);
+  return fileContents.split("\n");
+};
+
 module.exports = {
   extractHeadLines,
-  generateErrorMessage
+  generateErrorMessage,
+  loadContentsFromFile
 };
