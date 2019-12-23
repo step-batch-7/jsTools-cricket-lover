@@ -8,7 +8,7 @@ const extractHeadLines = function(listOfLines) {
 
 const generateErrorMessage = function(filename) {
   const errorMessage = `head: ${filename}: No such file or directory`;
-  return errorMessage;
+  return { error: errorMessage };
 };
 
 const loadContentsFromFile = function(filePath, readFile) {
@@ -33,7 +33,7 @@ const performHeadOperation = function(commandLineArgs, fsModules) {
 
   const listOfLines = loadContentsFromFile(filename, readFile);
   const headLines = extractHeadLines(listOfLines);
-  return headLines;
+  return { headLines };
 };
 
 module.exports = {

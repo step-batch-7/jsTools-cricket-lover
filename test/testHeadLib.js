@@ -32,7 +32,7 @@ describe("defaultFlow", function() {
   describe("generateErrorMessage", function() {
     it("should generate the error message with the given file name", function() {
       const filename = "a.txt";
-      const expected = `head: a.txt: No such file or directory`;
+      const expected = { error: `head: a.txt: No such file or directory` };
       const actual = generateErrorMessage(filename);
       assert.deepStrictEqual(actual, expected);
     });
@@ -89,12 +89,12 @@ describe("defaultFlow", function() {
         assert.strictEqual(filePath, "a.txt");
         return true;
       };
-      const expected = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0";
+      const expected = { headLines: "1\n2\n3\n4\n5\n6\n7\n8\n9\n0" };
       const actual = performHeadOperation(commandLineArgs, {
         readFile,
         existsFile
       });
-      assert.strictEqual(actual, expected);
+      assert.deepStrictEqual(actual, expected);
     });
     it("should perform the head operation and give head lines on the given command line arguments when file is present", function() {
       const commandLineArgs = ["node", "head.js", "a.txt"];
@@ -108,12 +108,12 @@ describe("defaultFlow", function() {
         assert.strictEqual(filePath, "a.txt");
         return true;
       };
-      const expected = "1\n2\n3\n4";
+      const expected = { headLines: "1\n2\n3\n4" };
       const actual = performHeadOperation(commandLineArgs, {
         readFile,
         existsFile
       });
-      assert.strictEqual(actual, expected);
+      assert.deepStrictEqual(actual, expected);
     });
     it("should perform the head operation and show error message on the given command line arguments when file is not present", function() {
       const commandLineArgs = ["node", "head.js", "a.txt"];
@@ -127,12 +127,12 @@ describe("defaultFlow", function() {
         assert.strictEqual(filePath, "a.txt");
         return false;
       };
-      const expected = `head: a.txt: No such file or directory`;
+      const expected = { error: `head: a.txt: No such file or directory` };
       const actual = performHeadOperation(commandLineArgs, {
         readFile,
         existsFile
       });
-      assert.strictEqual(actual, expected);
+      assert.deepStrictEqual(actual, expected);
     });
   });
 });
