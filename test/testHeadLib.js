@@ -25,7 +25,7 @@ describe("defaultFlow", function() {
   describe("generateErrorMessage", function() {
     it("should generate the error message with the given file name", function() {
       const filename = "a.txt";
-      const expected = "head: a.txt: No such file or directory";
+      const expected = `head: a.txt: No such file or directory`;
       const actual = generateErrorMessage(filename);
       assert.deepStrictEqual(actual, expected);
     });
@@ -120,7 +120,7 @@ describe("defaultFlow", function() {
         assert.strictEqual(filePath, "a.txt");
         return false;
       };
-      const expected = "head: a.txt: No such file or directory";
+      const expected = `head: a.txt: No such file or directory`;
       const actual = performHeadOperation(commandLineArgs, {
         readFile,
         existsFile
