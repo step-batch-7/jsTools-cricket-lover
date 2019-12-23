@@ -3,12 +3,11 @@ const fs = require("fs");
 
 const extractHeadLines = function(listOfLines) {
   const listOfHeadLines = listOfLines.slice(0, 10);
-  if (listOfHeadLines == "") return "";
-  return listOfHeadLines.join("\n") + "\n";
+  return listOfHeadLines.join("\n");
 };
 
 const generateErrorMessage = function(filename) {
-  const errorMessage = `head: ${filename}: No such file or directory\n`;
+  const errorMessage = `head: ${filename}: No such file or directory`;
   return errorMessage;
 };
 
