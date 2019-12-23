@@ -3,7 +3,8 @@ const {
   extractHeadLines,
   generateErrorMessage,
   loadContentsFromFile,
-  readCommandLineArgs
+  readCommandLineArgs,
+  performHeadOperation
 } = require("../src/headLib");
 
 describe("defaultFlow", function() {
@@ -27,7 +28,7 @@ describe("defaultFlow", function() {
     it("should load contents from the given file", function() {
       const filePath = "a.txt";
       const encoding = "utf8";
-      const fileReader = function(encoding, filePath) {
+      const fileReader = function(filePath, encoding) {
         assert.strictEqual(filePath, "a.txt");
         assert.strictEqual(encoding, "utf8");
         const fileData = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n11\n12\n13\n14\n15";
@@ -56,10 +57,50 @@ describe("defaultFlow", function() {
   });
   describe("readCommandLineArgs", function() {
     it("should read the arguments from the given file", function() {
-      const commandLineArgs = ["node", "head.js", "a.txt"];
+      const userArgs = ["a.txt"];
       const expected = { filename: "a.txt" };
-      const actual = readCommandLineArgs(commandLineArgs);
+      const actual = readCommandLineArgs(userArgs);
       assert.deepStrictEqual(actual, expected);
+    });
+  });
+  describe("performHeadOperation", function() {
+    it("should perform the head operation and give head lines on the given command line arguments when file is present", function() {
+      const commandLineArgs = ["node", "head.js", "a.txt"];
+      const readFile = function(filePath, encoding) {
+        assert.strictEqual(filePath, "a.txt");
+        assert.strictEqual(encoding, "utf8");
+        const fileData = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n11\n12\n13\n14\n15";
+        return fileData;
+      };
+      const existsFile = function(filePath) {
+        assert.strictEqual(filePath, "a.txt");
+        return true;
+      };
+      const expected = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0";
+      const actual = performHeadOperation(commandLineArgs, {
+        readFile,
+        existsFile
+      });
+      assert.strictEqual(actual, expected);
+    });
+    it("should perform the head operation and show error message on the given command line arguments when file is not present", function() {
+      const commandLineArgs = ["node", "head.js", "a.txt"];
+      const readFile = function(filePath, encoding) {
+        assert.strictEqual(filePath, "a.txt");
+        assert.strictEqual(encoding, "utf8");
+        const fileData = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n11\n12\n13\n14\n15";
+        return fileData;
+      };
+      const existsFile = function(filePath) {
+        assert.strictEqual(filePath, "a.txt");
+        return false;
+      };
+      const expected = "head: a.txt: No such file or directory";
+      const actual = performHeadOperation(commandLineArgs, {
+        readFile,
+        existsFile
+      });
+      assert.strictEqual(actual, expected);
     });
   });
 });
