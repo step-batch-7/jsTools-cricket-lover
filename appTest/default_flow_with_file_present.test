@@ -1,0 +1,11 @@
+(node head.js docs/todo.txt)
+-----all versions of head flow------
+0.1.head a.txt
+    (a) has at least 10 lines
+    (b) has less than 10 lines
+    (c) no file present
+0.2.head
+0.3.head -n 5 a.txt
+0.4.head -n 7
+0.5.head a.txt b.txt
+0.6.head -n 5 a.txt b.txt
