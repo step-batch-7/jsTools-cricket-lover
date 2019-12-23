@@ -1,12 +1,14 @@
+"use strict";
 const fs = require("fs");
 
-const extractHeadLines = function(listOfLines, noOfLines = 10) {
-  const listOfHeadLines = listOfLines.slice(0, noOfLines);
-  return listOfHeadLines.join("\n");
+const extractHeadLines = function(listOfLines) {
+  const listOfHeadLines = listOfLines.slice(0, 10);
+  if (listOfHeadLines == "") return "";
+  return listOfHeadLines.join("\n") + "\n";
 };
 
 const generateErrorMessage = function(filename) {
-  const errorMessage = `head: ${filename}: No such file or directory`;
+  const errorMessage = `head: ${filename}: No such file or directory\n`;
   return errorMessage;
 };
 
@@ -15,8 +17,8 @@ const loadContentsFromFile = function(filePath, readFile) {
   return fileContents.split("\n");
 };
 
-const readCommandLineArgs = function(commandLineArgs) {
-  const filename = commandLineArgs[0];
+const parseUserArgs = function(userArgs) {
+  const filename = userArgs[0];
   const headOptions = { filename };
   return headOptions;
 };
@@ -24,7 +26,7 @@ const readCommandLineArgs = function(commandLineArgs) {
 const performHeadOperation = function(commandLineArgs, fsModules) {
   const userArgs = commandLineArgs.slice(2);
   const { readFile, existsFile } = fsModules;
-  const { filename } = readCommandLineArgs(userArgs);
+  const { filename } = parseUserArgs(userArgs);
 
   if (!existsFile(filename)) {
     return generateErrorMessage(filename);
@@ -39,6 +41,6 @@ module.exports = {
   extractHeadLines,
   generateErrorMessage,
   loadContentsFromFile,
-  readCommandLineArgs,
+  parseUserArgs,
   performHeadOperation
 };

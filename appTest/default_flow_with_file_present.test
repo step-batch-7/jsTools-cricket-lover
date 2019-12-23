@@ -1,4 +1,4 @@
-(node head.js resource/sample.txt)
+(node head.js resource/moreThan10Lines.txt)
 1
 2
 3

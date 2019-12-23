@@ -1,9 +1,10 @@
+"use strict";
 const assert = require("chai").assert;
 const {
   extractHeadLines,
   generateErrorMessage,
   loadContentsFromFile,
-  readCommandLineArgs,
+  parseUserArgs,
   performHeadOperation
 } = require("../src/headLib");
 
@@ -11,13 +12,19 @@ describe("defaultFlow", function() {
   describe("extractHeadLines", function() {
     it("should extract the 10 head lines from the given list of lines", function() {
       const listOfLines = "1234567890abcd".split("");
-      const expected = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0";
+      const expected = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n";
       const actual = extractHeadLines(listOfLines);
       assert.deepStrictEqual(actual, expected);
     });
     it("should extract the total lines when number of lines present are less than 10", function() {
       const listOfLines = "1234".split("");
-      const expected = "1\n2\n3\n4";
+      const expected = "1\n2\n3\n4\n";
+      const actual = extractHeadLines(listOfLines);
+      assert.deepStrictEqual(actual, expected);
+    });
+    it("should give empty string when file is empty", function() {
+      const listOfLines = "".split("");
+      const expected = "";
       const actual = extractHeadLines(listOfLines);
       assert.deepStrictEqual(actual, expected);
     });
@@ -25,7 +32,7 @@ describe("defaultFlow", function() {
   describe("generateErrorMessage", function() {
     it("should generate the error message with the given file name", function() {
       const filename = "a.txt";
-      const expected = `head: a.txt: No such file or directory`;
+      const expected = `head: a.txt: No such file or directory\n`;
       const actual = generateErrorMessage(filename);
       assert.deepStrictEqual(actual, expected);
     });
@@ -61,11 +68,11 @@ describe("defaultFlow", function() {
       assert.deepStrictEqual(actual, expected);
     });
   });
-  describe("readCommandLineArgs", function() {
+  describe("parseUserArgs", function() {
     it("should read the arguments from the given file", function() {
       const userArgs = ["a.txt"];
       const expected = { filename: "a.txt" };
-      const actual = readCommandLineArgs(userArgs);
+      const actual = parseUserArgs(userArgs);
       assert.deepStrictEqual(actual, expected);
     });
   });
@@ -82,7 +89,7 @@ describe("defaultFlow", function() {
         assert.strictEqual(filePath, "a.txt");
         return true;
       };
-      const expected = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0";
+      const expected = "1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n";
       const actual = performHeadOperation(commandLineArgs, {
         readFile,
         existsFile
@@ -101,7 +108,7 @@ describe("defaultFlow", function() {
         assert.strictEqual(filePath, "a.txt");
         return true;
       };
-      const expected = "1\n2\n3\n4";
+      const expected = "1\n2\n3\n4\n";
       const actual = performHeadOperation(commandLineArgs, {
         readFile,
         existsFile
@@ -120,7 +127,7 @@ describe("defaultFlow", function() {
         assert.strictEqual(filePath, "a.txt");
         return false;
       };
-      const expected = `head: a.txt: No such file or directory`;
+      const expected = `head: a.txt: No such file or directory\n`;
       const actual = performHeadOperation(commandLineArgs, {
         readFile,
         existsFile
