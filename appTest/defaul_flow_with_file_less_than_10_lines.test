@@ -1,0 +1,5 @@
+(node head.js resource/sampleLessThan10Lines.txt)
+1
+2
+3
+4
