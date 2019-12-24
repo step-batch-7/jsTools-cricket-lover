@@ -2,7 +2,7 @@
 0.1.head a.txt
     --done--(a) has at least 10 lines
     --done--(b) has less than 10 lines
-    (c) no file present
+    --done--(c) no file present
 0.2.head
 0.3.head -n 5 a.txt
 0.4.head -n 7
