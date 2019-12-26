@@ -93,10 +93,11 @@ describe("defaultFlow", function() {
         return true;
       };
       const expected = { headLines: "1\n2\n3\n4\n5\n6\n7\n8\n9\n0", error: "" };
-      const actual = performHeadOperation(commandLineArgs, {
+      const actual = performHeadOperation(
+        commandLineArgs,
         readFileSync,
         existsSync
-      });
+      );
       assert.deepStrictEqual(actual, expected);
     });
     it("should perform the head operation and give head lines on the given command line arguments when file is present", function() {
@@ -112,10 +113,11 @@ describe("defaultFlow", function() {
         return true;
       };
       const expected = { headLines: "1\n2\n3\n4", error: "" };
-      const actual = performHeadOperation(commandLineArgs, {
+      const actual = performHeadOperation(
+        commandLineArgs,
         readFileSync,
         existsSync
-      });
+      );
       assert.deepStrictEqual(actual, expected);
     });
     it("should perform the head operation and show error message on the given command line arguments when file is not present", function() {
@@ -134,10 +136,11 @@ describe("defaultFlow", function() {
         error: `head: a.txt: No such file or directory`,
         headLines: ""
       };
-      const actual = performHeadOperation(commandLineArgs, {
+      const actual = performHeadOperation(
+        commandLineArgs,
         readFileSync,
         existsSync
-      });
+      );
       assert.deepStrictEqual(actual, expected);
     });
   });

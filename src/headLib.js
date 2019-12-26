@@ -18,9 +18,8 @@ const parseUserArgs = function(userArgs) {
   return { filename };
 };
 
-const performHeadOperation = function(commandLineArgs, fsModules) {
-  const userArgs = commandLineArgs.slice(2);
-  const { readFileSync, existsSync } = fsModules;
+const performHeadOperation = function(cmdLineArgs, readFileSync, existsSync) {
+  const userArgs = cmdLineArgs.slice(2);
   let error = "";
   const { filename } = parseUserArgs(userArgs);
   if (!existsSync(filename)) {
