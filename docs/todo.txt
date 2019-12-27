@@ -10,7 +10,7 @@
 0.6.head -n 5 a.txt b.txt
 
 ---------
-v0.1 
+--done--v0.1 
 create all the required files and directories
     md src test
     touch head.js src/headLib.js test/testHeadLib.js
