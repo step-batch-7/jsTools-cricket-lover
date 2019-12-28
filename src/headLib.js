@@ -1,26 +1,28 @@
-"use strict";
+'use strict';
 const extractHeadLines = function(listOfLines) {
-  const listOfHeadLines = listOfLines.slice(0, 10);
-  return listOfHeadLines.join("\n");
+  const start = 0;
+  const end = 10;
+  const listOfHeadLines = listOfLines.slice(start, end);
+  return listOfHeadLines.join('\n');
 };
 
 const generateErrorMessage = function(filename) {
   const errorMessage = `head: ${filename}: No such file or directory`;
-  return { error: errorMessage, headLines: "" };
+  return { error: errorMessage, headLines: '' };
 };
 
 const loadContentsFromFile = function(filePath, readFileSync) {
-  return readFileSync(filePath, "utf8").split("\n");
+  return readFileSync(filePath, 'utf8').split('\n');
 };
 
 const parseUserArgs = function(userArgs) {
-  const filename = userArgs[0];
+  const [filename] = userArgs;
   return { filename };
 };
 
 const performHeadOperation = function(cmdLineArgs, readFileSync, existsSync) {
-  const userArgs = cmdLineArgs.slice(2);
-  let error = "";
+  const [, , ...userArgs] = cmdLineArgs;
+  const error = ''; 
   const { filename } = parseUserArgs(userArgs);
   if (!existsSync(filename)) {
     return generateErrorMessage(filename);

@@ -3,7 +3,7 @@
     --done--(a) has at least 10 lines
     --done--(b) has less than 10 lines
     --done--(c) no file present
-0.2.head
+0.2.head 
 0.3.head -n 5 a.txt
 0.4.head -n 7
 0.5.head a.txt b.txt
@@ -24,3 +24,20 @@ make sure mocha is working fine
     loadContentsFromFile
     parseUserArgs
     performHeadOperation
+
+    v0.2
+    possibilities:    
+        node head.js
+        echo "content" | node head.js
+        cat filePath | node head.js
+        node head.js < filePath
+    tasks:
+        loadContentsFromStdin 
+        add new appTests
+    modifications:
+        modify code from synchronous to asynchronous(readFileSync -> readFile)
+        add a callback function for readFile
+        modify tests
+    difficulties:
+        testing async functions
+
