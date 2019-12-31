@@ -2,3 +2,4 @@ node_modules/
 .nyc_output
 expected.txt
 output.txt
+.DS_Store

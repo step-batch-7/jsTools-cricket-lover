@@ -25,7 +25,7 @@ make sure mocha is working fine
     parseUserArgs
     performHeadOperation
 
-    v0.2
+v0.2
     possibilities:    
         node head.js
         echo "content" | node head.js
