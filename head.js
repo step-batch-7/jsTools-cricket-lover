@@ -1,12 +1,16 @@
 'use strict';
-const { readFileSync, existsSync } = require('fs');
+const { readFile } = require('fs');
 const { stdout, stderr } = process;
 const { performHeadOperation } = require('./src/headLib');
 
-const main = function(cmdLineArgs) {
-  const result = performHeadOperation(cmdLineArgs, readFileSync, existsSync);
+const displayResult = function(result) {
   stdout.write(result.headLines);
   stderr.write(result.error);
 };
 
-main(process.argv);
+const main = function() {
+  const [, , ...userArgs] = process.argv;
+  performHeadOperation(userArgs, readFile, displayResult);
+};
+
+main();

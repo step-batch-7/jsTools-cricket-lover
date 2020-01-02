@@ -79,5 +79,14 @@
         "prefer-spread":"warn",
         "no-useless-call":"error",
         "no-param-reassign" : "error"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["test/*.js"],
+            "rules": {
+               "no-magic-numbers": "off",
+               "max-len":"off"
+            }
+        }
+    ]
 }

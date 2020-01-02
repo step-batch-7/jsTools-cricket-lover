@@ -1,18 +1,15 @@
 'use strict';
-const extractHeadLines = function(listOfLines) {
+const EMPTY_STRING = '';
+
+const extractHeadLines = function(lines) {
   const start = 0;
   const end = 10;
-  const listOfHeadLines = listOfLines.slice(start, end);
+  const listOfHeadLines = lines.split('\n').slice(start, end);
   return listOfHeadLines.join('\n');
 };
 
 const generateErrorMessage = function(filename) {
-  const errorMessage = `head: ${filename}: No such file or directory`;
-  return { error: errorMessage, headLines: '' };
-};
-
-const loadContentsFromFile = function(filePath, readFileSync) {
-  return readFileSync(filePath, 'utf8').split('\n');
+  return `head: ${filename}: No such file or directory`;
 };
 
 const parseUserArgs = function(userArgs) {
@@ -20,21 +17,25 @@ const parseUserArgs = function(userArgs) {
   return { filename };
 };
 
-const performHeadOperation = function(cmdLineArgs, readFileSync, existsSync) {
-  const [, , ...userArgs] = cmdLineArgs;
-  const error = ''; 
+const performHeadOperation = function(userArgs, readFile, onHeadComplete) {
   const { filename } = parseUserArgs(userArgs);
-  if (!existsSync(filename)) {
-    return generateErrorMessage(filename);
-  }
-  const listOfLines = loadContentsFromFile(filename, readFileSync);
-  return { headLines: extractHeadLines(listOfLines), error };
+  let result = EMPTY_STRING;
+
+  const onReadComplete = (err, content) => {
+    if(err) {
+      result = {headLines: EMPTY_STRING, error: generateErrorMessage(filename)};
+    } else {
+      result = {headLines: extractHeadLines(content), error: EMPTY_STRING};
+    }
+    onHeadComplete(result);
+  };
+
+  readFile(filename, 'utf8', onReadComplete);
 };
 
 module.exports = {
   extractHeadLines,
   generateErrorMessage,
-  loadContentsFromFile,
   parseUserArgs,
   performHeadOperation
 };

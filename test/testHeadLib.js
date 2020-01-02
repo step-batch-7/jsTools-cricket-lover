@@ -1,29 +1,29 @@
 'use strict';
 const assert = require('chai').assert;
+//const sinon = require('sinon');
 const {
   extractHeadLines,
   generateErrorMessage,
-  loadContentsFromFile,
   parseUserArgs,
   performHeadOperation
 } = require('../src/headLib');
 
-describe('defaultFlow', () => {
+describe('defaultBehaviour', () => {
   describe('extractHeadLines', () => {
     it('should extract 10 head lines from the given list of lines', () =>  {
-      const listOfLines = '1234567890abcd'.split('');
+      const listOfLines = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\na\nb\nc\nd';
       const expected = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0';
       const actual = extractHeadLines(listOfLines);
       assert.deepStrictEqual(actual, expected);
     });
     it('should extract all lines when number of lines are less than 10', () => {
-      const listOfLines = '1234'.split('');
+      const listOfLines = '1\n2\n3\n4';
       const expected = '1\n2\n3\n4';
       const actual = extractHeadLines(listOfLines);
       assert.deepStrictEqual(actual, expected);
     });
     it('should give empty string when file is empty', () => {
-      const listOfLines = ''.split('');
+      const listOfLines = '';
       const expected = '';
       const actual = extractHeadLines(listOfLines);
       assert.deepStrictEqual(actual, expected);
@@ -32,41 +32,8 @@ describe('defaultFlow', () => {
   describe('generateErrorMessage', () => {
     it('should generate the error message with the given file name', () => {
       const filename = 'a.txt';
-      const expected = {
-        error: 'head: a.txt: No such file or directory',
-        headLines: ''
-      };
+      const expected = 'head: a.txt: No such file or directory';
       const actual = generateErrorMessage(filename);
-      assert.deepStrictEqual(actual, expected);
-    });
-  });
-  describe('loadContentsFromFile', () => {
-    it('should load contents from the given file', () => {
-      const filePath = 'a.txt';
-      const fileReader = function(filePath, encoding) {
-        assert.strictEqual(filePath, 'a.txt');
-        assert.strictEqual(encoding, 'utf8');
-        const fileData = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n11\n12\n13\n14\n15';
-        return fileData;
-      };
-      const expected = [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '0',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15'
-      ];
-      const actual = loadContentsFromFile(filePath, fileReader);
       assert.deepStrictEqual(actual, expected);
     });
   });
@@ -79,68 +46,47 @@ describe('defaultFlow', () => {
     });
   });
   describe('performHeadOperation', () => {
-    it('should give headLines when file has 10 or more lines', () => {
-      const commandLineArgs = ['node', 'head.js', 'a.txt'];
-      const readFileSync = function(filePath, encoding) {
-        assert.strictEqual(filePath, 'a.txt');
+    it('should give all the lines when file has less than 10 lines', function (done) {
+      const readFile = function (filePath, encoding, callback) {
+        assert.strictEqual(filePath, 'one.txt');
         assert.strictEqual(encoding, 'utf8');
-        const fileData = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n11\n12\n13\n14\n15';
-        return fileData;
+        setTimeout(() => callback(null, '1\n2\n3'), 0);
       };
-      const existsSync = function(filePath) {
-        assert.strictEqual(filePath, 'a.txt');
-        return true;
+      const displayResult = ({error, headLines}) => {
+        assert.strictEqual(headLines, '1\n2\n3');
+        assert.strictEqual(error, '');
+        done();
       };
-      const expected = { headLines: '1\n2\n3\n4\n5\n6\n7\n8\n9\n0', error: '' };
-      const actual = performHeadOperation(
-        commandLineArgs,
-        readFileSync,
-        existsSync
-      );
-      assert.deepStrictEqual(actual, expected);
+      performHeadOperation(['one.txt'], readFile, displayResult);
+      
     });
-    it('should give head lines when file has less than 10 lines', () => {
-      const commandLineArgs = ['node', 'head.js', 'a.txt'];
-      const readFileSync = function(filePath, encoding) {
-        assert.strictEqual(filePath, 'a.txt');
+    it('should give 10 lines when file has 10 or more than 10 lines', function (done) {
+      const readFile = function (filePath, encoding, callback) {
+        assert.strictEqual(filePath, 'one.txt');
         assert.strictEqual(encoding, 'utf8');
-        const fileData = '1\n2\n3\n4';
-        return fileData;
+        setTimeout(() => callback(null, '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n11\n12\n13'), 0);
       };
-      const existsSync = function(filePath) {
-        assert.strictEqual(filePath, 'a.txt');
-        return true;
+      const displayResult = ({error, headLines}) => {
+        assert.strictEqual(headLines, '1\n2\n3\n4\n5\n6\n7\n8\n9\n0');
+        assert.strictEqual(error, '');
+        done();
       };
-      const expected = { headLines: '1\n2\n3\n4', error: '' };
-      const actual = performHeadOperation(
-        commandLineArgs,
-        readFileSync,
-        existsSync
-      );
-      assert.deepStrictEqual(actual, expected);
+      performHeadOperation(['one.txt'], readFile, displayResult);
+      
     });
-    it('should show error message when file is not present', () => {
-      const commandLineArgs = ['node', 'head.js', 'a.txt'];
-      const readFileSync = function(filePath, encoding) {
-        assert.strictEqual(filePath, 'a.txt');
+    it('should give 10 lines when file has 10 or more than 10 lines', function (done) {
+      const readFile = function (filePath, encoding, callback) {
+        assert.strictEqual(filePath, 'one.txt');
         assert.strictEqual(encoding, 'utf8');
-        const fileData = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n11\n12\n13\n14\n15';
-        return fileData;
+        setTimeout(() => callback('error', null), 0);
       };
-      const existsSync = function(filePath) {
-        assert.strictEqual(filePath, 'a.txt');
-        return false;
+      const displayResult = ({error, headLines}) => {
+        assert.strictEqual(headLines, '');
+        assert.strictEqual(error, 'head: one.txt: No such file or directory');
+        done();
       };
-      const expected = {
-        error: 'head: a.txt: No such file or directory',
-        headLines: ''
-      };
-      const actual = performHeadOperation(
-        commandLineArgs,
-        readFileSync,
-        existsSync
-      );
-      assert.deepStrictEqual(actual, expected);
+      performHeadOperation(['one.txt'], readFile, displayResult);
+      
     });
   });
 });
