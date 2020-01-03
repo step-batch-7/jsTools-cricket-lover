@@ -14,15 +14,15 @@ const generateErrorMessage = function(filename) {
 
 const parseUserArgs = function(userArgs) {
   const [filename] = userArgs;
-  return { filename };
+  return {filename};
 };
 
 const performHeadOperation = function(userArgs, readFile, onHeadComplete) {
-  const { filename } = parseUserArgs(userArgs);
   let result = EMPTY_STRING;
+  const {filename} = parseUserArgs(userArgs);
 
   const onReadComplete = (err, content) => {
-    if(err) {
+    if (err) {
       result = {headLines: EMPTY_STRING, error: generateErrorMessage(filename)};
     } else {
       result = {headLines: extractHeadLines(content), error: EMPTY_STRING};
