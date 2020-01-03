@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha && eslint src test && ./runAppTests.sh appTest/*.test"
+    "test": "nyc mocha && eslint src test && ./runAppTests.sh appTest/*.test",
+    "getLinter": "curl https://raw.githubusercontent.com/blpabhishek/eslintrc-config/master/.eslintrc.json -o .eslintrc.json"
   },
   "keywords": [],
   "author": "",
