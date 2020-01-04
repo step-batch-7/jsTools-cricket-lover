@@ -1,5 +1,6 @@
 'use strict';
 const assert = require('chai').assert;
+const sinon = require('sinon');
 const {
   extractHeadLines,
   generateErrorMessage,
@@ -45,47 +46,39 @@ describe('defaultBehaviour', () => {
     });
   });
   describe('performHeadOperation', () => {
-    it('should give all the lines when file has less than 10 lines', (done) => {
-      const readFile = (filePath, encoding, callback) => {
-        assert.strictEqual(filePath, 'one.txt');
-        assert.strictEqual(encoding, 'utf8');
-        setTimeout(() => callback(null, '1\n2\n3'), 0);
-      };
-      const displayResult = ({error, headLines}) => {
-        assert.strictEqual(headLines, '1\n2\n3');
-        assert.strictEqual(error, '');
-        done();
-      };
-      performHeadOperation(['one.txt'], readFile, displayResult);
-    });
-    it('should give 10 lines when file has 10 or more lines', (done) => {
-      const readFile = (filePath, encoding, callback) => {
-        assert.strictEqual(filePath, 'one.txt');
-        assert.strictEqual(encoding, 'utf8');
-        setTimeout(
-          () => callback(null, '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\n11\n12\n13'),
-          0
-        );
-      };
-      const displayResult = ({error, headLines}) => {
-        assert.strictEqual(headLines, '1\n2\n3\n4\n5\n6\n7\n8\n9\n0');
-        assert.strictEqual(error, '');
-        done();
-      };
-      performHeadOperation(['one.txt'], readFile, displayResult);
-    });
-    it('should give 10 lines when file has 10 or more lines', (done) => {
-      const readFile = (filePath, encoding, callback) => {
-        assert.strictEqual(filePath, 'one.txt');
-        assert.strictEqual(encoding, 'utf8');
-        setTimeout(() => callback('error', null), 0);
-      };
-      const displayResult = ({error, headLines}) => {
-        assert.strictEqual(headLines, '');
-        assert.strictEqual(error, 'head: one.txt: No such file or directory');
-        done();
-      };
-      performHeadOperation(['one.txt'], readFile, displayResult);
+    describe('withContent', () => {
+      let readStream, streamPicker, pick;
+      beforeEach(() => {
+        readStream = {setEncoding: sinon.fake(), on: sinon.fake()};
+        pick = function(filePath){
+          assert.strictEqual(filePath, 'one.txt');
+          return readStream;
+        };
+        streamPicker = {pick};
+      });
+      it('should give all the lines when file has less than 10 lines', function(done) {
+        
+        const displayResult = ({error, headLines}) => {
+          assert.strictEqual(headLines, '1\n2\n3');
+          assert.strictEqual(error, '');
+          done();
+        };
+        performHeadOperation(['one.txt'], streamPicker, displayResult);
+        assert.ok(readStream.setEncoding.calledWith('utf8'));
+        assert.ok(readStream.on.firstCall.calledWith('data'));
+        readStream.on.firstCall.lastArg('1\n2\n3');
+      });
+      it('should give 10 lines when file has 10 or more lines', (done) => {
+        const displayResult = ({error, headLines}) => {
+          assert.strictEqual(headLines, '1\n2\n3\n4\n5\n6\n7\n8\n9\n0');
+          assert.strictEqual(error, '');
+          done();
+        };
+        performHeadOperation(['one.txt'], streamPicker, displayResult);
+        assert.ok(readStream.setEncoding.calledWith('utf8'));
+        assert.ok(readStream.on.firstCall.calledWith('data'));
+        readStream.on.firstCall.lastArg('1\n2\n3\n4\n5\n6\n7\n8\n9\n0');
+      });
     });
   });
 });

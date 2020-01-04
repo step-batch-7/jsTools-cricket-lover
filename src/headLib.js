@@ -17,20 +17,27 @@ const parseUserArgs = function(userArgs) {
   return {filename};
 };
 
-const performHeadOperation = function(userArgs, readFile, onHeadComplete) {
+const loadContents = function(readStream, onLoadComplete) {
+  readStream.setEncoding('utf8');
+  readStream.on('data', (content) => onLoadComplete(null, content));
+  readStream.on('error', (error) => onLoadComplete(error, null));
+};
+
+const performHeadOperation = function(userArgs, streamPicker, onHeadComplete) {
   let result = EMPTY_STRING;
   const {filename} = parseUserArgs(userArgs);
+  const readStream = streamPicker.pick(filename);
 
-  const onReadComplete = (err, content) => {
-    if (err) {
-      result = {headLines: EMPTY_STRING, error: generateErrorMessage(filename)};
-    } else {
+  const onReadComplete = (error, content) => {
+    if (!error) {
       result = {headLines: extractHeadLines(content), error: EMPTY_STRING};
+    } else {
+      result = {headLines: EMPTY_STRING, error: generateErrorMessage(filename)};
     }
     onHeadComplete(result);
   };
 
-  readFile(filename, 'utf8', onReadComplete);
+  loadContents(readStream, onReadComplete);
 };
 
 module.exports = {

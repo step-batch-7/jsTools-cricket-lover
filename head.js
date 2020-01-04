@@ -1,6 +1,7 @@
 'use strict';
-const {readFile} = require('fs');
-const {stdout, stderr} = process;
+const {createReadStream} = require('fs');
+const {stdin, stdout, stderr} = process;
+const StreamPicker = require('./src/streamPicker');
 const {performHeadOperation} = require('./src/headLib');
 
 const displayResult = function (result) {
@@ -10,7 +11,8 @@ const displayResult = function (result) {
 
 const main = function () {
   const [, , ...userArgs] = process.argv;
-  performHeadOperation(userArgs, readFile, displayResult);
+  const streamPicker = new StreamPicker(createReadStream, stdin);
+  performHeadOperation(userArgs, streamPicker, displayResult);
 };
 
 main();
