@@ -13,7 +13,7 @@ describe('defaultBehaviour', () => {
     it('should extract 10 head lines from the given list of lines', () => {
       const listOfLines = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\na\nb\nc\nd';
       const expected = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0';
-      const actual = extractHeadLines(listOfLines);
+      const actual = extractHeadLines(listOfLines, 10);
       assert.deepStrictEqual(actual, expected);
     });
     it('should extract all lines when number of lines are less than 10', () => {
@@ -28,6 +28,12 @@ describe('defaultBehaviour', () => {
       const actual = extractHeadLines(listOfLines);
       assert.deepStrictEqual(actual, expected);
     });
+    it('should extract requested number of headlines head lines ', () => {
+      const listOfLines = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\na\nb\nc\nd';
+      const expected = '1\n2\n3\n4\n5\n6\n7\n8\n9\n0\na\nb\nc';
+      const actual = extractHeadLines(listOfLines, 13);
+      assert.deepStrictEqual(actual, expected);
+    });
   });
   describe('generateErrorMessage', () => {
     it('should generate the error message with the given file name', () => {
@@ -40,7 +46,13 @@ describe('defaultBehaviour', () => {
   describe('parseUserArgs', () => {
     it('should read the arguments from the given file', () => {
       const userArgs = ['a.txt'];
-      const expected = {filename: 'a.txt'};
+      const expected = {filename: 'a.txt', numOfLines: 10};
+      const actual = parseUserArgs(userArgs);
+      assert.deepStrictEqual(actual, expected);
+    });
+    it('should read the arguments from the given file', () => {
+      const userArgs = ['-n', '7', 'a.txt'];
+      const expected = {filename: 'a.txt', numOfLines: '7'};
       const actual = parseUserArgs(userArgs);
       assert.deepStrictEqual(actual, expected);
     });
@@ -56,7 +68,7 @@ describe('defaultBehaviour', () => {
         };
         streamPicker = {pick};
       });
-      it('should give all the lines when file has less than 10 lines', function(done) {
+      it('should give all the lines when file has less than 10 lines', done => {
         
         const displayResult = ({error, headLines}) => {
           assert.strictEqual(headLines, '1\n2\n3');
@@ -82,3 +94,4 @@ describe('defaultBehaviour', () => {
     });
   });
 });
+
