@@ -1,4 +1,4 @@
-cat resource/moreThan10Lines.txt | node head.js -n 7
+cat resource/moreThan10Lines.txt | node head.js -n 12
 1
 2
 3
@@ -6,3 +6,8 @@ cat resource/moreThan10Lines.txt | node head.js -n 7
 5
 6
 7
+8
+9
+0
+11
+12
