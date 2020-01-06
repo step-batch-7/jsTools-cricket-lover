@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 'use strict';
 const assert = require('chai').assert;
 const sinon = require('sinon');
@@ -90,6 +91,26 @@ describe('defaultBehaviour', () => {
         assert.ok(readStream.setEncoding.calledWith('utf8'));
         assert.ok(readStream.on.firstCall.calledWith('data'));
         readStream.on.firstCall.lastArg('1\n2\n3\n4\n5\n6\n7\n8\n9\n0');
+      });
+    });
+    describe('with error', () => {
+      it('should give 10 lines when file has 10 or more lines', (done) => {
+        let readStream, streamPicker, pick;
+        readStream = {setEncoding: sinon.fake(), on: sinon.fake()};
+        pick = function(filePath){
+          assert.strictEqual(filePath, 'bad.txt');
+          return readStream;
+        };
+        streamPicker = {pick};
+        const displayResult = ({headLines, error}) => {
+          assert.strictEqual(headLines, '');
+          assert.strictEqual(error, 'head: bad.txt: No such file or directory');
+          done();
+        };
+        performHeadOperation(['bad.txt'], streamPicker, displayResult);
+        assert.ok(readStream.setEncoding.calledWith('utf8'));
+        assert.ok(readStream.on.secondCall.calledWith('error'));
+        readStream.on.secondCall.lastArg('head: bad.txt: No such file or directory');
       });
     });
   });

@@ -42,6 +42,7 @@ const performHeadOperation = function(userArgs, streamPicker, onHeadComplete) {
         error: EMPTY_STRING
       };
     } else {
+			
       result = {
         headLines: EMPTY_STRING,
         error: generateErrorMessage(filename)
