@@ -95,6 +95,7 @@ describe('defaultBehaviour', () => {
     });
     describe('with error', () => {
       it('should give 10 lines when file has 10 or more lines', (done) => {
+        const errorMessage = 'head: bad.txt: No such file or directory';
         let readStream, streamPicker, pick;
         readStream = {setEncoding: sinon.fake(), on: sinon.fake()};
         pick = function(filePath){
@@ -110,7 +111,7 @@ describe('defaultBehaviour', () => {
         performHeadOperation(['bad.txt'], streamPicker, displayResult);
         assert.ok(readStream.setEncoding.calledWith('utf8'));
         assert.ok(readStream.on.secondCall.calledWith('error'));
-        readStream.on.secondCall.lastArg('head: bad.txt: No such file or directory');
+        readStream.on.secondCall.lastArg(errorMessage);
       });
     });
   });
